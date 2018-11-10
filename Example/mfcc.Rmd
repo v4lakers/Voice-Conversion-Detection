@@ -1,0 +1,130 @@
+---
+title: "mfcc"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# REQUIRED LIBRARIES
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(plotROC)
+library(ggthemes)
+library(tidyverse)
+library(caret)
+library(klaR)
+library(InformationValue)
+library(dplyr)
+```
+
+```{r}
+# DATA UPLOAD AND PARTITION
+
+# Connect to the MFCC CSV
+mfcc <- read.csv("mfcc.csv", header=TRUE)
+
+set.seed(10)  # Set a Seed to make Results Reproducable
+
+# Create a Partition with a 80/20 Train and Test Split
+indexes <- createDataPartition(mfcc$Type, times = 1, p = .8, list = FALSE)
+
+train_data <- mfcc[indexes, ] # Train Data
+test_data <- mfcc[-indexes, ] # Test Data
+```
+
+```{r}
+# STRING SHORTCUT
+
+# Create String: 'Type ~ f0+f1.....+f51'
+xnam <- paste("f", 0:51, sep="")
+fmla <- as.formula(paste("Type ~ ", paste(xnam, collapse= "+")))
+```
+
+```{r}
+# MODEL CREATION
+
+# Logistic Regression Model  
+glm.out <- glm(fmla, data=train_data, family=binomial)
+
+# Display Model Results
+summary(glm.out)
+```
+
+```{r}
+# DENSITY PLOT OF CLASS SEPERATION
+
+# Assessing Model Efficacy with the Training Data
+lr_data <- data.frame(predictor=predict(glm.out, train_data), Type = train_data$Type)
+
+# Plot the Results
+ggplot(lr_data, aes(x=predictor, fill=factor(Type))) + geom_density(alpha=.5) + ggtitle("Density Plot of Model Accuracy")
+```
+
+```{r}
+# ROC CURVES
+
+# Dataframe of Predicted Values and Actual Values for Train Data
+df1 <- data.frame(predictor = predict(glm.out, train_data), known_truth = train_data$Type, model = "Train Data")
+
+# Dataframe of Predicted Values and Actual Values for Test Data
+df2 <- data.frame(predictor = predict(glm.out, test_data), known_truth = test_data$Type, model = "Test Data")
+
+# Combine the two DataFrames
+combined <- rbind(df1, df2)
+
+p <- ggplot(combined, aes(d = known_truth, m = predictor, color = model)) +
+  geom_roc(n.cuts = 0) +ggtitle("Area Under Curve for Train and Test Data")
+
+# Plot the Curves
+p
+
+```
+
+```{r}
+# AREA UNDER THE CURVE (AUC)
+
+# Get Training and Test ROC Model Names
+model <- unique(combined$model)
+model_info <- data.frame(model, group = order(model))
+
+# Display Model Name and Corresponding AUC
+left_join(model_info, calc_auc(p)) %>%
+  dplyr::select(model, AUC)
+```
+
+```{r}
+# MODEL RESULTS
+
+# Determine Model Performance on Test Data
+predicted <- predict(glm.out, test_data, type="response")
+
+# Find Optimal Threshold
+optCutOff <- optimalCutoff(test_data$Type, predicted)
+
+# Create a Confusion Matrix
+confusion_mfcc <- confusionMatrix(test_data$Type, predicted, threshold = optCutOff)
+
+# Display Confusion Matrix
+confusion_mfcc
+
+# Obtain Confusion Matrix Elements
+tn <- confusion_mfcc[1, "fake"] # True Negative
+fn <- confusion_mfcc[2, "fake"] # False Negative
+fp <- confusion_mfcc[1, "real"] # False Positive
+tp <- confusion_mfcc[2, "real"] # True Positive
+
+# Calculate Various Measures
+accuracy <- (tn+tp) / nrow(test_data)
+precision <- (tp) / (fp+tp)
+recall <- (tp) / (fn+tp)
+specificity <- (tn)/ (tn+fp)
+f1 <- 2*(recall * precision) / (recall + precision)
+
+# Print the Measures
+paste("Accuracy: ",round(accuracy, digits = 3)*100,"%",sep="")
+paste("Precision: ",round(precision, digits = 3)*100,"%",sep="")
+paste("Recall: ",round(recall, digits = 3)*100,"%",sep="")
+paste("f1: ",round(f1, digits = 3)*100,"%",sep="")
+```
+
+
+

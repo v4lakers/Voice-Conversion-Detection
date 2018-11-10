@@ -1,0 +1,10 @@
+mock
+scipy
+numpy
+python_speech_features
+pandas
+sklearn
+matplotlib
+wav
+scipy
+os
