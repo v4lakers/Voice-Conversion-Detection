@@ -20,7 +20,7 @@ For this demo, we are using data from the Voice Conversion Challenge of 2016. To
 ```sh
 cd Example
 ```
-![folders](https://github.com/ciads-ut/converted-voice-detection/blob/master/Visualizations/folders.PNG)
+![folders](https://user-images.githubusercontent.com/25602219/51804252-1bacfe80-2224-11e9-8011-12b857991ef3.PNG)
 
 There were a total of 10 speakers and thus, 10 folders holding the recordings for the respective speakers.
   - Each folder contains the same 216 utterances from the book “The Call of the Wild” by Jack London
@@ -41,8 +41,7 @@ We will begin with analyzing two signals: one real and one converted. The comman
 cd Visualizations/Wave
 python wav.py
 ```
-
-![signals](https://github.com/ciads-ut/converted-voice-detection/blob/master/Visualizations/signals.png)
+![signals](https://user-images.githubusercontent.com/25602219/51804256-223b7600-2224-11e9-9114-e2989463442a.png)
 
 
 From this analysis, it seemed quite apparent that the lows for each of the signals differed ever so slightly. When it came to lows in the signals, authentic voice clips (both target and source) had a greater range of wave amplitudes than that of generated voice clips. This trend seemed recur throughout the corpra.
@@ -57,7 +56,7 @@ python mfcc_test.py
 
 These 52 features go along with a class label of real or fake, based on which folder the WAV file came from. In total, each WAV file has 53 features: 52 MFCC features and 1 class label (real or fake). All 53 features for each of the 3888 WAV files are written into a CSV that will be used to train a machine learning model.The picture below shows a screenshot of the first 14 features for a few WAV files. 
 
-![csv](https://github.com/ciads-ut/converted-voice-detection/blob/master/Visualizations/csv.PNG)
+![csv](https://user-images.githubusercontent.com/25602219/51804260-2d8ea180-2224-11e9-9cf4-62b46f7bb74a.PNG)
 
 
 #### T-SNE
@@ -83,18 +82,19 @@ If you do not have R installed, click [here](http://rpubs.com/v4lakers/mfcc) to 
 #### Results
 Once the model was created using the 53 features, I did some evaluation on the model performance. The first model analysis I undertook was a density plot that seemed to separate fake and converted voices well on the training data. There seems to be a pretty good separation between the two classes. 
 
-![density](https://github.com/ciads-ut/converted-voice-detection/blob/master/Visualizations/density.png)
+![density](https://user-images.githubusercontent.com/25602219/51804264-34b5af80-2224-11e9-97d1-33f65b70568e.png)
 
 
 The next form of analysis were plotting the ROC curves for both the training data and test data. The results showed that both training and test data had about .98 area under the curve.
 
-![roc](https://github.com/ciads-ut/converted-voice-detection/blob/master/Visualizations/roc.png)
+![roc](https://user-images.githubusercontent.com/25602219/51804269-45febc00-2224-11e9-8403-56cb680110db.png)
 
 
 The final form of analysis was assessing the model’s performance on just the test data. The model had an accuracy of 81.3\% while precision was 99.5\% and recall was 75\%. These values indicate that the MFCC was indeed a powerful tool in differentiating between converted voices and authentic voices.
 
 
-![acc](https://github.com/ciads-ut/converted-voice-detection/blob/master/Visualizations/acc.png)
+![acc](https://user-images.githubusercontent.com/25602219/51804273-50b95100-2224-11e9-9151-392725e697d8.png)
+
 
 
 #### Conclusion
