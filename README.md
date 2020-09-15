@@ -3,8 +3,7 @@
 "With Great Power Comes Great Responsibility" - Uncle Ben (Spiderman 2002). 
 
 Voice Conversion is the transformation of one speaker’s voice (the source) to sound like another speakers voice (the target). 
-As voice conversion tools improve, generated and authentic voice clips become increasingly indiscernible to the human ear which makes the dissemination of spurious information much more conducive.  If you are interested in learning an effective approach to converted voice detection, you have come to the right place. For a more detailed account of this project, check out the [paper](https://github.com/ciads-ut/converted-voice-detection/blob/master/Paper%20%26%20Presentation/paper.pdf)
-and [presentation](https://github.com/ciads-ut/converted-voice-detection/blob/master/Paper%20%26%20Presentation/Voice_Conversion_Presentation.pdf).
+As voice conversion tools improve, generated and authentic voice clips become increasingly indiscernible to the human ear which makes the dissemination of spurious information much more conducive.  If you are interested in learning an effective approach to converted voice detection, you have come to the right place. 
 
 ## Voice Conversion
 The voice conversion tool used in this demo is called Sprocket. Sprocket is an open source voice conversion tool that allows for users to convert one speaker’s voice (the source) to another speakers voice (the target). The creator of Sprocket, Kazuhiro Kobayashi, wanted to develop a tool that allowed users to easily test voice conversion from the comfort of their own computer. To learn more about Sprocket, visit their [website](https://github.com/k2kobayashi/sprocket).
